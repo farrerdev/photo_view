@@ -218,8 +218,26 @@ class PhotoViewCoreState extends State<PhotoViewCore>
     }
   }
 
-  void onDoubleTap() {
+  void handleDoubleTapDown(TapDownDetails details) {
     nextScaleState();
+
+    final currentState = scaleStateController.scaleState;
+    if (currentState != PhotoViewScaleState.initial) {
+      final prevScaleState = scaleStateController.prevScaleState;
+      final preScale = getScaleForScaleState(
+        prevScaleState,
+        scaleBoundaries,
+      );
+      final nextScale = getScaleForScaleState(
+        currentState,
+        scaleBoundaries,
+      );
+      final center = Offset(context.size!.width / 2, context.size!.height / 2);
+      final tapPosition = details.localPosition;
+      final toPosition =
+          (controller.position + center - tapPosition) * nextScale / preScale;
+      animatePosition(controller.position, toPosition);
+    }
   }
 
   void animateScale(double from, double to) {
@@ -355,7 +373,7 @@ class PhotoViewCoreState extends State<PhotoViewCore>
 
             return PhotoViewGestureDetector(
               child: child,
-              onDoubleTap: nextScaleState,
+              onDoubleTapDown: handleDoubleTapDown,
               onScaleStart: onScaleStart,
               onScaleUpdate: onScaleUpdate,
               onScaleEnd: onScaleEnd,

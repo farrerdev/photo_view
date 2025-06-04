@@ -10,14 +10,14 @@ class PhotoViewGestureDetector extends StatelessWidget {
     this.onScaleStart,
     this.onScaleUpdate,
     this.onScaleEnd,
-    this.onDoubleTap,
+    this.onDoubleTapDown,
     this.child,
     this.onTapUp,
     this.onTapDown,
     this.behavior,
   }) : super(key: key);
 
-  final GestureDoubleTapCallback? onDoubleTap;
+  final GestureTapDownCallback? onDoubleTapDown;
   final HitCornersDetector? hitDetector;
 
   final GestureScaleStartCallback? onScaleStart;
@@ -56,7 +56,7 @@ class PhotoViewGestureDetector extends StatelessWidget {
         GestureRecognizerFactoryWithHandlers<DoubleTapGestureRecognizer>(
       () => DoubleTapGestureRecognizer(debugOwner: this),
       (DoubleTapGestureRecognizer instance) {
-        instance..onDoubleTap = onDoubleTap;
+        instance..onDoubleTapDown = onDoubleTapDown;
       },
     );
 
